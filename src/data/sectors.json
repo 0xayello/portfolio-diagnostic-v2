@@ -1,0 +1,352 @@
+{
+  "BTC": {
+    "sector": "Store of Value",
+    "category": "Bitcoin",
+    "tier": "major",
+    "chain": "Bitcoin",
+    "ecosystem": "Bitcoin"
+  },
+  "ETH": {
+    "sector": "Smart Contract Platform",
+    "category": "Ethereum",
+    "tier": "major",
+    "chain": "Ethereum",
+    "ecosystem": "Ethereum"
+  },
+  "SOL": {
+    "sector": "Smart Contract Platform",
+    "category": "Solana",
+    "tier": "major",
+    "chain": "Solana",
+    "ecosystem": "Solana"
+  },
+  "USDC": {
+    "sector": "Stablecoin",
+    "category": "USD Stablecoin",
+    "tier": "stablecoin",
+    "chain": "Multi-chain",
+    "ecosystem": "Circle"
+  },
+  "USDT": {
+    "sector": "Stablecoin",
+    "category": "USD Stablecoin",
+    "tier": "stablecoin",
+    "chain": "Multi-chain",
+    "ecosystem": "Tether"
+  },
+  "DAI": {
+    "sector": "Stablecoin",
+    "category": "USD Stablecoin",
+    "tier": "stablecoin",
+    "chain": "Ethereum",
+    "ecosystem": "MakerDAO"
+  },
+  "BNB": {
+    "sector": "Smart Contract Platform",
+    "category": "Exchange Token",
+    "tier": "blue-chip",
+    "chain": "BNB Chain",
+    "ecosystem": "Binance"
+  },
+  "XRP": {
+    "sector": "Payment",
+    "category": "Payment",
+    "tier": "blue-chip",
+    "chain": "XRP Ledger",
+    "ecosystem": "Ripple"
+  },
+  "ADA": {
+    "sector": "Smart Contract Platform",
+    "category": "Cardano",
+    "tier": "blue-chip",
+    "chain": "Cardano",
+    "ecosystem": "Cardano"
+  },
+  "AVAX": {
+    "sector": "Smart Contract Platform",
+    "category": "Avalanche",
+    "tier": "blue-chip",
+    "chain": "Avalanche",
+    "ecosystem": "Avalanche"
+  },
+  "DOT": {
+    "sector": "Smart Contract Platform",
+    "category": "Polkadot",
+    "tier": "blue-chip",
+    "chain": "Polkadot",
+    "ecosystem": "Polkadot"
+  },
+  "MATIC": {
+    "sector": "Layer 2",
+    "category": "Polygon",
+    "tier": "blue-chip",
+    "chain": "Polygon",
+    "ecosystem": "Polygon"
+  },
+  "LINK": {
+    "sector": "Oracle",
+    "category": "Oracle",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "Chainlink"
+  },
+  "UNI": {
+    "sector": "DEX",
+    "category": "DEX",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "Uniswap"
+  },
+  "AAVE": {
+    "sector": "Lending",
+    "category": "Lending",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "Aave"
+  },
+  "ATOM": {
+    "sector": "Smart Contract Platform",
+    "category": "Cosmos",
+    "tier": "blue-chip",
+    "chain": "Cosmos",
+    "ecosystem": "Cosmos"
+  },
+  "NEAR": {
+    "sector": "Smart Contract Platform",
+    "category": "NEAR",
+    "tier": "blue-chip",
+    "chain": "NEAR",
+    "ecosystem": "NEAR"
+  },
+  "ARB": {
+    "sector": "Layer 2",
+    "category": "Optimistic Rollup",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "Arbitrum"
+  },
+  "OP": {
+    "sector": "Layer 2",
+    "category": "Optimistic Rollup",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "Optimism"
+  },
+  "LDO": {
+    "sector": "Liquid Staking",
+    "category": "Staking Derivative",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "Lido"
+  },
+  "DOGE": {
+    "sector": "Meme",
+    "category": "Meme Coin",
+    "tier": "meme",
+    "chain": "Dogecoin",
+    "ecosystem": "Dogecoin"
+  },
+  "SHIB": {
+    "sector": "Meme",
+    "category": "Meme Coin",
+    "tier": "meme",
+    "chain": "Ethereum",
+    "ecosystem": "Shiba Inu"
+  },
+  "PEPE": {
+    "sector": "Meme",
+    "category": "Meme Coin",
+    "tier": "meme",
+    "chain": "Ethereum",
+    "ecosystem": "Pepe"
+  },
+  "WIF": {
+    "sector": "Meme",
+    "category": "Meme Coin",
+    "tier": "meme",
+    "chain": "Solana",
+    "ecosystem": "Dogwifhat"
+  },
+  "BONK": {
+    "sector": "Meme",
+    "category": "Meme Coin",
+    "tier": "meme",
+    "chain": "Solana",
+    "ecosystem": "Bonk"
+  },
+  "FLOKI": {
+    "sector": "Meme",
+    "category": "Meme Coin",
+    "tier": "meme",
+    "chain": "Multi-chain",
+    "ecosystem": "Floki"
+  },
+  "SUI": {
+    "sector": "Smart Contract Platform",
+    "category": "Move-based L1",
+    "tier": "mid-cap",
+    "chain": "Sui",
+    "ecosystem": "Sui"
+  },
+  "APT": {
+    "sector": "Smart Contract Platform",
+    "category": "Move-based L1",
+    "tier": "mid-cap",
+    "chain": "Aptos",
+    "ecosystem": "Aptos"
+  },
+  "SEI": {
+    "sector": "Smart Contract Platform",
+    "category": "Trading-Optimized L1",
+    "tier": "mid-cap",
+    "chain": "Cosmos",
+    "ecosystem": "Sei"
+  },
+  "INJ": {
+    "sector": "Derivatives",
+    "category": "DEX",
+    "tier": "mid-cap",
+    "chain": "Cosmos",
+    "ecosystem": "Injective"
+  },
+  "TIA": {
+    "sector": "Infrastructure",
+    "category": "Modular Blockchain",
+    "tier": "mid-cap",
+    "chain": "Celestia",
+    "ecosystem": "Celestia"
+  },
+  "PENDLE": {
+    "sector": "DeFi",
+    "category": "Yield Trading",
+    "tier": "mid-cap",
+    "chain": "Ethereum",
+    "ecosystem": "Pendle"
+  },
+  "JUP": {
+    "sector": "DEX",
+    "category": "DEX Aggregator",
+    "tier": "blue-chip",
+    "chain": "Solana",
+    "ecosystem": "Jupiter"
+  },
+  "ONDO": {
+    "sector": "RWA",
+    "category": "Tokenized Assets",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "Ondo Finance"
+  },
+  "HYPE": {
+    "sector": "Derivatives",
+    "category": "Perpetuals DEX",
+    "tier": "new",
+    "chain": "Hyperliquid",
+    "ecosystem": "Hyperliquid"
+  },
+  "ENA": {
+    "sector": "DeFi",
+    "category": "Synthetic Assets",
+    "tier": "new",
+    "chain": "Ethereum",
+    "ecosystem": "Ethena"
+  },
+  "FET": {
+    "sector": "AI",
+    "category": "AI Agent",
+    "tier": "mid-cap",
+    "chain": "Ethereum",
+    "ecosystem": "Fetch.ai"
+  },
+  "RNDR": {
+    "sector": "Infrastructure",
+    "category": "GPU Rendering",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "Render"
+  },
+  "WLD": {
+    "sector": "AI",
+    "category": "Identity",
+    "tier": "mid-cap",
+    "chain": "Ethereum",
+    "ecosystem": "Worldcoin"
+  },
+  "FIL": {
+    "sector": "Storage",
+    "category": "Decentralized Storage",
+    "tier": "blue-chip",
+    "chain": "Filecoin",
+    "ecosystem": "Filecoin"
+  },
+  "GRT": {
+    "sector": "Infrastructure",
+    "category": "Indexing Protocol",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "The Graph"
+  },
+  "PYTH": {
+    "sector": "Oracle",
+    "category": "Price Oracle",
+    "tier": "blue-chip",
+    "chain": "Solana",
+    "ecosystem": "Pyth"
+  },
+  "MKR": {
+    "sector": "Lending",
+    "category": "Lending",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "MakerDAO"
+  },
+  "CRV": {
+    "sector": "DEX",
+    "category": "DEX",
+    "tier": "blue-chip",
+    "chain": "Ethereum",
+    "ecosystem": "Curve"
+  },
+  "RUNE": {
+    "sector": "DEX",
+    "category": "Cross-chain DEX",
+    "tier": "mid-cap",
+    "chain": "Multi-chain",
+    "ecosystem": "THORChain"
+  },
+  "GMX": {
+    "sector": "Derivatives",
+    "category": "Perpetuals DEX",
+    "tier": "mid-cap",
+    "chain": "Arbitrum",
+    "ecosystem": "GMX"
+  },
+  "DYDX": {
+    "sector": "Derivatives",
+    "category": "Perpetuals DEX",
+    "tier": "mid-cap",
+    "chain": "dYdX Chain",
+    "ecosystem": "dYdX"
+  },
+  "STX": {
+    "sector": "Smart Contract Platform",
+    "category": "Bitcoin L2",
+    "tier": "mid-cap",
+    "chain": "Bitcoin",
+    "ecosystem": "Stacks"
+  },
+  "IMX": {
+    "sector": "Layer 2",
+    "category": "ZK Rollup",
+    "tier": "mid-cap",
+    "chain": "Ethereum",
+    "ecosystem": "Immutable X"
+  },
+  "TON": {
+    "sector": "Smart Contract Platform",
+    "category": "TON",
+    "tier": "blue-chip",
+    "chain": "TON",
+    "ecosystem": "TON"
+  }
+}
