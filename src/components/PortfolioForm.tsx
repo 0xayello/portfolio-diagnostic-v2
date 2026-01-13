@@ -9,6 +9,155 @@ interface PortfolioFormProps {
 
 const DEFAULT_TOKENS = ['BTC', 'ETH', 'SOL', 'USDC'];
 
+type PresetPortfolio = {
+  name: string;
+  allocation: PortfolioAllocation[];
+};
+
+const PRESET_PORTFOLIOS: PresetPortfolio[] = [
+  {
+    name: 'Dupla Clássica',
+    allocation: [
+      { token: 'BTC', percentage: 60 },
+      { token: 'ETH', percentage: 40 },
+    ],
+  },
+  {
+    name: 'Blue Chips + Caixa',
+    allocation: [
+      { token: 'BTC', percentage: 45 },
+      { token: 'ETH', percentage: 35 },
+      { token: 'SOL', percentage: 10 },
+      { token: 'USDC', percentage: 10 },
+    ],
+  },
+  {
+    name: 'Defensiva',
+    allocation: [
+      { token: 'BTC', percentage: 35 },
+      { token: 'ETH', percentage: 25 },
+      { token: 'USDC', percentage: 30 },
+      { token: 'LINK', percentage: 10 },
+    ],
+  },
+  {
+    name: 'ETH + L2s',
+    allocation: [
+      { token: 'ETH', percentage: 40 },
+      { token: 'BTC', percentage: 25 },
+      { token: 'ARB', percentage: 10 },
+      { token: 'OP', percentage: 10 },
+      { token: 'USDC', percentage: 15 },
+    ],
+  },
+  {
+    name: 'DeFi Core',
+    allocation: [
+      { token: 'BTC', percentage: 30 },
+      { token: 'ETH', percentage: 30 },
+      { token: 'LINK', percentage: 10 },
+      { token: 'UNI', percentage: 10 },
+      { token: 'AAVE', percentage: 10 },
+      { token: 'USDC', percentage: 10 },
+    ],
+  },
+  {
+    name: 'Agressiva L1',
+    allocation: [
+      { token: 'BTC', percentage: 25 },
+      { token: 'ETH', percentage: 25 },
+      { token: 'SOL', percentage: 18 },
+      { token: 'AVAX', percentage: 12 },
+      { token: 'LINK', percentage: 10 },
+      { token: 'USDC', percentage: 10 },
+    ],
+  },
+  {
+    name: 'Alt Diversificada (8)',
+    allocation: [
+      { token: 'BTC', percentage: 20 },
+      { token: 'ETH', percentage: 20 },
+      { token: 'SOL', percentage: 15 },
+      { token: 'AVAX', percentage: 10 },
+      { token: 'LINK', percentage: 10 },
+      { token: 'MATIC', percentage: 10 },
+      { token: 'DOT', percentage: 10 },
+      { token: 'USDC', percentage: 5 },
+    ],
+  },
+  {
+    name: 'DeFi Yield (LST + DeFi)',
+    allocation: [
+      { token: 'BTC', percentage: 20 },
+      { token: 'ETH', percentage: 25 },
+      { token: 'LDO', percentage: 15 }, // Lido
+      { token: 'PENDLE', percentage: 10 },
+      { token: 'AAVE', percentage: 10 },
+      { token: 'UNI', percentage: 8 },
+      { token: 'ETHFI', percentage: 7 },
+      { token: 'USDC', percentage: 5 },
+    ],
+  },
+  {
+    name: 'Solana Ecosystem',
+    allocation: [
+      { token: 'BTC', percentage: 20 },
+      { token: 'SOL', percentage: 35 },
+      { token: 'JUP', percentage: 15 },
+      { token: 'JITO', percentage: 10 },
+      { token: 'RNDR', percentage: 10 }, // Render
+      { token: 'USDC', percentage: 10 },
+    ],
+  },
+  {
+    name: 'RWA + Infra',
+    allocation: [
+      { token: 'BTC', percentage: 30 },
+      { token: 'ETH', percentage: 25 },
+      { token: 'ONDO', percentage: 15 },
+      { token: 'LINK', percentage: 15 },
+      { token: 'BNB', percentage: 10 },
+      { token: 'USDC', percentage: 5 },
+    ],
+  },
+  {
+    name: 'Memes (Pimenta)',
+    allocation: [
+      { token: 'BTC', percentage: 35 },
+      { token: 'ETH', percentage: 25 },
+      { token: 'DOGE', percentage: 15 },
+      { token: 'PEPE', percentage: 10 },
+      { token: 'WIF', percentage: 7 },
+      { token: 'DOG', percentage: 3 },
+      { token: 'USDC', percentage: 5 },
+    ],
+  },
+  {
+    name: 'L1 Next Gen',
+    allocation: [
+      { token: 'BTC', percentage: 25 },
+      { token: 'ETH', percentage: 20 },
+      { token: 'APT', percentage: 10 }, // Aptos
+      { token: 'SUI', percentage: 10 },
+      { token: 'SEI', percentage: 10 },
+      { token: 'STX', percentage: 10 }, // Stacks
+      { token: 'BNB', percentage: 10 },
+      { token: 'USDC', percentage: 5 },
+    ],
+  },
+  {
+    name: 'Perps + Infra',
+    allocation: [
+      { token: 'BTC', percentage: 30 },
+      { token: 'ETH', percentage: 25 },
+      { token: 'HYPE', percentage: 10 },
+      { token: 'SOL', percentage: 10 },
+      { token: 'LINK', percentage: 10 },
+      { token: 'USDC', percentage: 15 },
+    ],
+  },
+];
+
 export default function PortfolioForm({ initialAllocation, onSubmit }: PortfolioFormProps) {
   const [allocation, setAllocation] = useState<PortfolioAllocation[]>(() => {
     // Initialize with initialAllocation or defaults
@@ -116,6 +265,17 @@ export default function PortfolioForm({ initialAllocation, onSubmit }: Portfolio
     );
   };
 
+  const applyRandomPortfolio = () => {
+    if (PRESET_PORTFOLIOS.length === 0) return;
+    const preset = PRESET_PORTFOLIOS[Math.floor(Math.random() * PRESET_PORTFOLIOS.length)];
+    // Clona pra evitar mutação acidental e garante token uppercase
+    setAllocation(preset.allocation.map(a => ({ token: a.token.toUpperCase(), percentage: a.percentage })));
+    setCustomLogos({});
+    setSearchQuery('');
+    setSearchResults([]);
+    setShowSearch(false);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isValid) {
@@ -146,10 +306,11 @@ export default function PortfolioForm({ initialAllocation, onSubmit }: Portfolio
             <h3 className="text-xl font-semibold text-white">Seus Ativos</h3>
             <button
               type="button"
-              onClick={distributeEvenly}
-              className="text-sm text-paradigma-mint hover:text-paradigma-mint-light transition-colors font-medium"
+              onClick={applyRandomPortfolio}
+              className="text-sm text-paradigma-mint hover:text-paradigma-mint-light transition-colors font-semibold inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-paradigma-mint/10 border border-paradigma-mint/25 hover:bg-paradigma-mint/15"
             >
-              Distribuir igualmente
+              <span>🎲</span>
+              Carteira Aleatória
             </button>
           </div>
 

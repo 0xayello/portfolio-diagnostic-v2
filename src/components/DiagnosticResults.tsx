@@ -100,11 +100,11 @@ export default function DiagnosticResults({ diagnostic, onNewAnalysis }: Diagnos
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
             {/* Score Circle - Enhanced */}
             <div className="relative flex-shrink-0 flex flex-col items-center">
-              {/* Outer glow */}
-              <div className="absolute top-0 left-0 w-44 h-44 md:w-48 md:h-48 rounded-full bg-paradigma-mint/10 blur-xl scale-110" />
-              
               {/* Main circle */}
               <div className="relative">
+                {/* Glow (centralizado e suave) */}
+                <div className="absolute inset-0 -z-10 rounded-full bg-paradigma-mint/12 blur-2xl opacity-70 scale-110" />
+                <div className="absolute inset-3 -z-10 rounded-full bg-paradigma-mint/10 blur-xl opacity-70" />
                 <svg viewBox="0 0 120 120" className="w-44 h-44 md:w-48 md:h-48 -rotate-90 drop-shadow-2xl">
                   <defs>
                     <linearGradient id="scoreRingGradient" x1="0" y1="0" x2="1" y2="1">
@@ -580,7 +580,7 @@ export default function DiagnosticResults({ diagnostic, onNewAnalysis }: Diagnos
       {/* Footer Disclaimer */}
       <div className="bg-paradigma-navy/30 rounded-2xl p-6 text-center">
         <p className="text-gray-500 text-sm leading-relaxed">
-          ⚠️ Este diagnóstico analisa se sua carteira está alinhada com seu perfil de risco, não a qualidade dos ativos investidos. Para uma análise aprofundada dos seus investimentos, recomendamos falar diretamente com um de nossos analistas.
+          ⚠️ O diagnóstico analisa se sua carteira está alinhada com seu perfil de risco. Não a qualidade dos ativos investidos. Para uma análise aprofundada dos seus investimentos, fale diretamente com um de nossos analistas.
         </p>
       </div>
 
