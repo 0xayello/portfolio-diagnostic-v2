@@ -69,7 +69,11 @@ export default function DiagnosticResults({ diagnostic, onNewAnalysis }: Diagnos
     return '#ff6b6b';
   };
 
-  const ringOffset = 553 - (553 * score / 100);
+  const clampedScore = Math.max(0, Math.min(100, Number.isFinite(score) ? score : 0));
+  // SVG com raio fixo (evita % e mantém o preenchimento sempre correto)
+  const ringRadius = 54;
+  const ringLength = 2 * Math.PI * ringRadius;
+  const ringOffset = ringLength * (1 - clampedScore / 100);
 
   const redFlags = flags.filter(f => f.type === 'red');
   const yellowFlags = flags.filter(f => f.type === 'yellow');
@@ -90,56 +94,76 @@ export default function DiagnosticResults({ diagnostic, onNewAnalysis }: Diagnos
       {/* Hero Section with Score */}
       <div className="glass-card-solid rounded-3xl p-8 md:p-12 relative overflow-hidden border-2 border-paradigma-navy/50">
         <div className="absolute top-0 right-0 w-64 h-64 bg-paradigma-mint/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-paradigma-mint/3 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4" />
         
         <div className="relative z-10">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 font-display">
-              Diagnóstico do seu Portfólio
-            </h2>
-          </div>
-
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            {/* Score Circle */}
-            <div className="relative flex-shrink-0">
-              <svg className="w-48 h-48 transform -rotate-90">
-                <circle cx="96" cy="96" r="88" fill="none" stroke="#252659" strokeWidth="12" />
-                <circle
-                  cx="96" cy="96" r="88" fill="none"
-                  stroke={getScoreRingColor(score)}
-                  strokeWidth="12" strokeLinecap="round"
-                  className="score-ring"
-                  style={{ '--ring-offset': ringOffset } as React.CSSProperties}
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className={`text-5xl font-bold ${getScoreColor(score)}`}>{score}</span>
-                <span className="text-gray-400 text-sm mt-1">de 100</span>
+            {/* Score Circle - Enhanced */}
+            <div className="relative flex-shrink-0 flex flex-col items-center">
+              {/* Outer glow */}
+              <div className="absolute top-0 left-0 w-44 h-44 md:w-48 md:h-48 rounded-full bg-paradigma-mint/10 blur-xl scale-110" />
+              
+              {/* Main circle */}
+              <div className="relative">
+                <svg viewBox="0 0 120 120" className="w-44 h-44 md:w-48 md:h-48 -rotate-90 drop-shadow-2xl">
+                  <defs>
+                    <linearGradient id="scoreRingGradient" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor={getScoreRingColor(clampedScore)} stopOpacity="0.95" />
+                      <stop offset="100%" stopColor={getScoreRingColor(clampedScore)} stopOpacity="0.55" />
+                    </linearGradient>
+                  </defs>
+                  {/* Background track */}
+                  <circle cx="60" cy="60" r={ringRadius} fill="none" stroke="#1a1b4b" strokeWidth="10" />
+                  {/* Subtle inner ring */}
+                  <circle cx="60" cy="60" r="44" fill="none" stroke="#252659" strokeWidth="2" />
+                  {/* Progress ring */}
+                  <circle
+                    cx="60" cy="60" r={ringRadius} fill="none"
+                    stroke="url(#scoreRingGradient)"
+                    strokeWidth="10" strokeLinecap="round"
+                    className="score-ring"
+                    style={{ 
+                      '--ring-length': ringLength,
+                      '--ring-offset': ringOffset,
+                      filter: 'drop-shadow(0 0 10px rgba(62, 207, 142, 0.35))'
+                    } as React.CSSProperties}
+                  />
+                </svg>
+                
+                {/* Center content */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className={`text-5xl md:text-6xl font-black ${getScoreColor(clampedScore)} drop-shadow-lg tracking-tight`}>{clampedScore}</span>
+                  <span className="text-gray-500 text-xs md:text-sm mt-1">de 100</span>
+                </div>
+              </div>
+
+              {/* Status Badge - below circle */}
+              <div className="mt-4">
+                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold shadow-sm ${
+                  adherenceLevel === 'high' 
+                    ? 'bg-paradigma-mint/15 text-paradigma-mint border border-paradigma-mint/25' 
+                    : adherenceLevel === 'medium'
+                    ? 'bg-warning/15 text-warning border border-warning/25'
+                    : 'bg-danger/15 text-danger border border-danger/25'
+                }`}>
+                  {adherenceLevel === 'high' ? '✅' : adherenceLevel === 'medium' ? '⚠️' : '🚨'}
+                  <span>{getScoreLabel(adherenceLevel)}</span>
+                </div>
               </div>
             </div>
 
-            {/* Summary + Spirit Animal */}
+            {/* Summary */}
             <div className="flex-1 text-center md:text-left">
-              <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start mb-4">
-                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold ${
-                  adherenceLevel === 'high' 
-                    ? 'bg-paradigma-mint/20 text-paradigma-mint' 
-                    : adherenceLevel === 'medium'
-                    ? 'bg-warning/20 text-warning'
-                    : 'bg-danger/20 text-danger'
-                }`}>
-                  {adherenceLevel === 'high' ? '✅' : adherenceLevel === 'medium' ? '⚠️' : '🚨'}
-                  {getScoreLabel(adherenceLevel)}
-                </div>
-                
-                {/* Spirit Animal Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-paradigma-navy/60 text-white border border-paradigma-mint/20">
-                  <span className="text-xl">{spiritAnimal.emoji}</span>
-                  {spiritAnimal.name}
-                </div>
-              </div>
+              {/* Title */}
+              <h2 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight">
+                <span className="inline-flex items-center gap-3">
+                  <span className="text-3xl md:text-4xl">🎯</span>
+                  <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">Score Final</span>
+                </span>
+              </h2>
               
               {/* Motivational Phrase */}
-              <div className="bg-paradigma-navy/40 rounded-xl p-4 mb-4 border border-paradigma-navy/60">
+              <div className="bg-paradigma-navy/40 rounded-xl p-4 mb-5 border border-paradigma-navy/60">
                 <p className="text-gray-200 text-lg italic flex items-start gap-2">
                   <span className="text-2xl">{motivationalPhrase.emoji}</span>
                   <span>"{motivationalPhrase.text}"</span>
@@ -147,22 +171,22 @@ export default function DiagnosticResults({ diagnostic, onNewAnalysis }: Diagnos
               </div>
 
               {/* Quick Stats */}
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-danger/10 rounded-lg">
+              <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                <div className="flex items-center gap-2 px-3 py-2 bg-danger/10 rounded-xl border border-danger/20">
                   <span className="text-danger">🚨</span>
-                  <span className="text-gray-300 text-sm">{redFlags.length} críticos</span>
+                  <span className="text-gray-300 text-sm font-medium">{redFlags.length} críticos</span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-warning/10 rounded-lg">
+                <div className="flex items-center gap-2 px-3 py-2 bg-warning/10 rounded-xl border border-warning/20">
                   <span className="text-warning">⚠️</span>
-                  <span className="text-gray-300 text-sm">{yellowFlags.length} atenção</span>
+                  <span className="text-gray-300 text-sm font-medium">{yellowFlags.length} atenção</span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-success/10 rounded-lg">
+                <div className="flex items-center gap-2 px-3 py-2 bg-success/10 rounded-xl border border-success/20">
                   <span className="text-paradigma-mint">✅</span>
-                  <span className="text-gray-300 text-sm">{greenFlags.length} positivos</span>
+                  <span className="text-gray-300 text-sm font-medium">{greenFlags.length} positivos</span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-paradigma-mint/10 rounded-lg">
+                <div className="flex items-center gap-2 px-3 py-2 bg-paradigma-mint/10 rounded-xl border border-paradigma-mint/20">
                   <span>🏆</span>
-                  <span className="text-gray-300 text-sm">{unlockedBadges.length} conquistas</span>
+                  <span className="text-gray-300 text-sm font-medium">{unlockedBadges.length} conquistas</span>
                 </div>
               </div>
             </div>
@@ -229,11 +253,11 @@ export default function DiagnosticResults({ diagnostic, onNewAnalysis }: Diagnos
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {aiAnalysis.strengths.length > 0 && (
-                <div className="p-5 bg-success/5 border border-success/20 rounded-2xl">
-                  <h3 className="text-lg font-semibold text-paradigma-mint mb-4 flex items-center gap-2">
-                    <span>💪</span> Pontos Fortes
-                  </h3>
+              <div className="p-5 bg-success/5 border border-success/20 rounded-2xl">
+                <h3 className="text-lg font-semibold text-paradigma-mint mb-4 flex items-center gap-2">
+                  <span>💪</span> Pontos Fortes
+                </h3>
+                {aiAnalysis.strengths.length > 0 ? (
                   <ul className="space-y-3">
                     {aiAnalysis.strengths.map((strength, i) => (
                       <li key={i} className="flex items-start gap-3 text-gray-300">
@@ -242,13 +266,18 @@ export default function DiagnosticResults({ diagnostic, onNewAnalysis }: Diagnos
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
-              {aiAnalysis.weaknesses.length > 0 && (
-                <div className="p-5 bg-warning/5 border border-warning/20 rounded-2xl">
-                  <h3 className="text-lg font-semibold text-warning mb-4 flex items-center gap-2">
-                    <span>⚠️</span> Pontos de Atenção
-                  </h3>
+                ) : (
+                  <div className="text-gray-400 text-sm italic">
+                    Nenhum ponto forte identificado nesta análise.
+                  </div>
+                )}
+              </div>
+
+              <div className="p-5 bg-warning/5 border border-warning/20 rounded-2xl">
+                <h3 className="text-lg font-semibold text-warning mb-4 flex items-center gap-2">
+                  <span>⚠️</span> Pontos Negativos
+                </h3>
+                {aiAnalysis.weaknesses.length > 0 ? (
                   <ul className="space-y-3">
                     {aiAnalysis.weaknesses.map((weakness, i) => (
                       <li key={i} className="flex items-start gap-3 text-gray-300">
@@ -257,8 +286,12 @@ export default function DiagnosticResults({ diagnostic, onNewAnalysis }: Diagnos
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
+                ) : (
+                  <div className="text-gray-400 text-sm italic">
+                    Nenhum ponto negativo identificado.
+                  </div>
+                )}
+              </div>
             </div>
 
             {aiAnalysis.recommendations.length > 0 && (
@@ -347,194 +380,84 @@ export default function DiagnosticResults({ diagnostic, onNewAnalysis }: Diagnos
         )}
 
         {/* Time Machine Tab */}
-        {activeTab === 'timemachine' && (() => {
-          // Dados do gráfico com datas ordenadas cronologicamente
-          const chartData = [
-            { date: 'Jan 2021', month: 0, ...timeMachineResults.find(r => r.scenario.date === 'Janeiro 2021') },
-            { date: 'Nov 2021', month: 10, ...timeMachineResults.find(r => r.scenario.date === 'Novembro 2021') },
-            { date: 'Nov 2022', month: 22, ...timeMachineResults.find(r => r.scenario.date === 'Novembro 2022') },
-            { date: 'Jan 2023', month: 24, ...timeMachineResults.find(r => r.scenario.date === 'Janeiro 2023') },
-            { date: 'Abr 2024', month: 39, ...timeMachineResults.find(r => r.scenario.date === 'Abril 2024') },
-            { date: 'Jan 2026', month: 60, portfolioChange: 0, scenario: { emoji: '📍', label: 'Hoje' } },
-          ].filter(d => d.portfolioChange !== undefined);
-          
-          const maxChange = Math.max(...chartData.map(d => Math.abs(d.portfolioChange || 0)), 100);
-          const chartHeight = 280;
-          const chartWidth = 700;
-          const padding = { top: 40, right: 40, bottom: 60, left: 70 };
-          const innerWidth = chartWidth - padding.left - padding.right;
-          const innerHeight = chartHeight - padding.top - padding.bottom;
-          
-          const xScale = (month: number) => padding.left + (month / 60) * innerWidth;
-          const yScale = (value: number) => padding.top + innerHeight / 2 - (value / maxChange) * (innerHeight / 2);
-          
-          const linePath = chartData
-            .map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d.month)} ${yScale(d.portfolioChange || 0)}`)
-            .join(' ');
+        {activeTab === 'timemachine' && (
+          <div className="animate-fade-in">
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">⏰ Time Machine</h3>
+              <p className="text-gray-400">Valorização do seu portfólio em cenários históricos</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {timeMachineResults.map((result, i) => (
+                <div
+                  key={i}
+                  className="p-5 rounded-2xl bg-paradigma-navy/30 border border-paradigma-navy/50 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-shadow"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl">{result.scenario.emoji}</span>
+                      <div className="min-w-0">
+                        <div className="text-white font-semibold">{result.scenario.label}</div>
+                        <div className="text-gray-400 text-sm">{result.scenario.date}</div>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`px-3 py-1 rounded-full text-sm font-bold ${
+                        result.portfolioChange >= 0
+                          ? 'bg-paradigma-mint/15 text-paradigma-mint'
+                          : 'bg-danger/15 text-danger'
+                      }`}
+                    >
+                      {result.wouldBe}
+                    </div>
+                  </div>
+
+                  <p className="text-gray-300 text-sm mt-3">{result.scenario.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Celebrity Tab */}
+        {activeTab === 'celebrity' && (() => {
+          // Gera iniciais do nome
+          const getInitials = (name: string) => {
+            const parts = name.replace(/[()]/g, '').trim().split(/\s+/).filter(Boolean);
+            if (parts.length === 0) return '??';
+            if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+          };
+          const initials = getInitials(celebrityMatch.name);
 
           return (
             <div className="animate-fade-in">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2">⏰ Time Machine</h3>
-                <p className="text-gray-400">Valorização do seu portfólio ao longo do tempo</p>
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold text-white mb-2">👥 Seu Portfólio Parece Com...</h3>
               </div>
 
-              {/* Gráfico SVG */}
-              <div className="bg-paradigma-navy/30 rounded-2xl p-4 border border-paradigma-navy/50 overflow-x-auto">
-                <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full min-w-[600px]">
-                  {/* Grid horizontal */}
-                  {[-100, -50, 0, 50, 100, 200, 300, 400, 500].filter(v => Math.abs(v) <= maxChange).map(value => (
-                    <g key={value}>
-                      <line
-                        x1={padding.left}
-                        y1={yScale(value)}
-                        x2={chartWidth - padding.right}
-                        y2={yScale(value)}
-                        stroke={value === 0 ? '#3ecf8e' : '#252659'}
-                        strokeWidth={value === 0 ? 2 : 1}
-                        strokeDasharray={value === 0 ? '' : '4,4'}
-                      />
-                      <text
-                        x={padding.left - 10}
-                        y={yScale(value)}
-                        fill="#9ca3af"
-                        fontSize="12"
-                        textAnchor="end"
-                        dominantBaseline="middle"
-                      >
-                        {value >= 0 ? `+${value}%` : `${value}%`}
-                      </text>
-                    </g>
-                  ))}
-
-                  {/* Área preenchida */}
-                  <path
-                    d={`${linePath} L ${xScale(chartData[chartData.length - 1].month)} ${yScale(0)} L ${xScale(chartData[0].month)} ${yScale(0)} Z`}
-                    fill="url(#areaGradient)"
-                    opacity="0.3"
-                  />
-                  
-                  {/* Gradiente */}
-                  <defs>
-                    <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#3ecf8e" />
-                      <stop offset="100%" stopColor="#3ecf8e" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-
-                  {/* Linha principal */}
-                  <path
-                    d={linePath}
-                    fill="none"
-                    stroke="#3ecf8e"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-
-                  {/* Pontos e labels */}
-                  {chartData.map((d, i) => (
-                    <g key={i}>
-                      <circle
-                        cx={xScale(d.month)}
-                        cy={yScale(d.portfolioChange || 0)}
-                        r="6"
-                        fill={(d.portfolioChange || 0) >= 0 ? '#3ecf8e' : '#ff6b6b'}
-                        stroke="#1a1b4b"
-                        strokeWidth="2"
-                      />
-                      <text
-                        x={xScale(d.month)}
-                        y={chartHeight - 20}
-                        fill="#9ca3af"
-                        fontSize="11"
-                        textAnchor="middle"
-                      >
-                        {d.date}
-                      </text>
-                      <text
-                        x={xScale(d.month)}
-                        y={chartHeight - 6}
-                        fill="#6b7280"
-                        fontSize="9"
-                        textAnchor="middle"
-                      >
-                        {d.scenario?.label}
-                      </text>
-                      {/* Valor no ponto */}
-                      <text
-                        x={xScale(d.month)}
-                        y={yScale(d.portfolioChange || 0) - 12}
-                        fill={(d.portfolioChange || 0) >= 0 ? '#3ecf8e' : '#ff6b6b'}
-                        fontSize="12"
-                        fontWeight="bold"
-                        textAnchor="middle"
-                      >
-                        {(d.portfolioChange || 0) >= 0 ? `+${(d.portfolioChange || 0).toFixed(0)}%` : `${(d.portfolioChange || 0).toFixed(0)}%`}
-                      </text>
-                    </g>
-                  ))}
-                </svg>
-              </div>
-
-              {/* Legenda */}
-              <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-3">
-                {timeMachineResults.map((result, i) => (
-                  <div key={i} className="flex items-center gap-2 p-3 rounded-xl bg-paradigma-navy/20 border border-paradigma-navy/30">
-                    <span className="text-xl">{result.scenario.emoji}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-white text-sm font-medium truncate">{result.scenario.label}</div>
-                      <div className={`text-xs font-bold ${result.portfolioChange >= 0 ? 'text-paradigma-mint' : 'text-danger'}`}>
-                        {result.wouldBe}
-                      </div>
-                    </div>
+              <div className="max-w-md mx-auto">
+                <div className="p-8 rounded-3xl bg-gradient-to-br from-paradigma-navy/60 to-paradigma-darker border-2 border-paradigma-mint/30 text-center shadow-2xl">
+                  {/* Avatar com iniciais */}
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-paradigma-navy to-paradigma-darker border-4 border-paradigma-mint/40 flex items-center justify-center shadow-lg shadow-paradigma-mint/10">
+                    <span className="text-5xl font-black text-paradigma-mint">{initials}</span>
                   </div>
-                ))}
+                  <div className="text-2xl font-bold text-white mb-2">{celebrityMatch.name}</div>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-paradigma-mint/20 rounded-full mb-4">
+                    <span className="text-paradigma-mint font-bold">{celebrityMatch.match}%</span>
+                    <span className="text-gray-300 text-sm">de similaridade</span>
+                  </div>
+                  <p className="text-gray-300 mb-4">{celebrityMatch.description}</p>
+                  <div className="bg-paradigma-navy/50 rounded-xl p-4">
+                    <div className="text-gray-400 text-sm mb-1">Estilo de portfólio:</div>
+                    <div className="text-white font-medium">{celebrityMatch.portfolio}</div>
+                  </div>
+                </div>
               </div>
             </div>
           );
         })()}
-
-        {/* Celebrity Tab */}
-        {activeTab === 'celebrity' && (
-          <div className="animate-fade-in">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-white mb-2">👥 Seu Portfólio Parece Com...</h3>
-            </div>
-
-            <div className="max-w-md mx-auto">
-              <div className="p-8 rounded-3xl bg-gradient-to-br from-paradigma-navy/60 to-paradigma-darker border-2 border-paradigma-mint/30 text-center">
-                <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-paradigma-navy/60 border-4 border-paradigma-mint/40 overflow-hidden">
-                  <img 
-                    src={celebrityMatch.image} 
-                    alt={celebrityMatch.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // Fallback to initial letters if image fails
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent) {
-                        parent.innerHTML = `<span class="text-4xl font-bold text-paradigma-mint">${celebrityMatch.name.split(' ').map(n => n[0]).join('')}</span>`;
-                        parent.classList.add('flex', 'items-center', 'justify-center');
-                      }
-                    }}
-                  />
-                </div>
-                <div className="text-2xl font-bold text-white mb-2">{celebrityMatch.name}</div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-paradigma-mint/20 rounded-full mb-4">
-                  <span className="text-paradigma-mint font-bold">{celebrityMatch.match}%</span>
-                  <span className="text-gray-300 text-sm">de similaridade</span>
-                </div>
-                <p className="text-gray-300 mb-4">{celebrityMatch.description}</p>
-                <div className="bg-paradigma-navy/50 rounded-xl p-4">
-                  <div className="text-gray-400 text-sm mb-1">Estilo de portfólio:</div>
-                  <div className="text-white font-medium">{celebrityMatch.portfolio}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Alerts Tab */}
         {activeTab === 'details' && (

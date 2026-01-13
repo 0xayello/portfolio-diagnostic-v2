@@ -280,6 +280,40 @@ export interface CelebrityMatch {
   portfolio: string;
 }
 
+function getInitials(name: string): string {
+  const cleaned = name
+    .replace(/\([^)]*\)/g, '') // remove parentheses content
+    .replace(/[^a-zA-ZÀ-ÿ\s]/g, ' ') // keep letters/spaces
+    .trim();
+
+  const parts = cleaned.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return '??';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+export function createAvatarDataUri(name: string): string {
+  const initials = getInitials(name);
+  const bg = '#1a1b4b';
+  const ring = '#3ecf8e';
+  const text = '#3ecf8e';
+
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="${ring}" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="${ring}" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="128" fill="${bg}"/>
+  <rect x="14" y="14" width="228" height="228" rx="114" fill="url(#g)" stroke="${ring}" stroke-opacity="0.35" stroke-width="8"/>
+  <text x="128" y="142" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto" font-size="88" font-weight="800" fill="${text}">${initials}</text>
+</svg>`;
+
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
 export function calculateCelebrityMatch(allocation: PortfolioAllocation[]): CelebrityMatch {
   const btcPercent = allocation.find(a => a.token === 'BTC')?.percentage || 0;
   const ethPercent = allocation.find(a => a.token === 'ETH')?.percentage || 0;
@@ -294,63 +328,63 @@ export function calculateCelebrityMatch(allocation: PortfolioAllocation[]): Cele
   const celebrities: CelebrityMatch[] = [
     {
       name: 'Michael Saylor',
-      image: '/celebrities/saylor.jpg',
+      image: createAvatarDataUri('Michael Saylor'),
       match: 0,
       description: 'CEO da MicroStrategy. Bitcoin maximalist declarado.',
       portfolio: '100% Bitcoin, sem arrependimentos.',
     },
     {
       name: 'Vitalik Buterin',
-      image: '/celebrities/vitalik.jpg',
+      image: createAvatarDataUri('Vitalik Buterin'),
       match: 0,
       description: 'Criador do Ethereum. Visionário e inovador.',
       portfolio: 'ETH + projetos DeFi e infraestrutura.',
     },
     {
       name: 'CZ (Changpeng Zhao)',
-      image: '/celebrities/cz.jpg',
+      image: createAvatarDataUri('CZ (Changpeng Zhao)'),
       match: 0,
       description: 'Fundador da Binance. Diversificação estratégica.',
       portfolio: 'BNB + portfólio diversificado de qualidade.',
     },
     {
       name: 'Arthur Hayes',
-      image: '/celebrities/hayes.jpg',
+      image: createAvatarDataUri('Arthur Hayes'),
       match: 0,
       description: 'Ex-CEO da BitMEX. Trader agressivo e ousado.',
       portfolio: 'BTC + altcoins com alavancagem mental.',
     },
     {
       name: 'Balaji Srinivasan',
-      image: '/celebrities/balaji.jpg',
+      image: createAvatarDataUri('Balaji Srinivasan'),
       match: 0,
       description: 'Ex-CTO da Coinbase. Visão macro e tech-heavy.',
       portfolio: 'Mix equilibrado de BTC, ETH e L1s promissoras.',
     },
     {
       name: 'Andre Cronje',
-      image: '/celebrities/cronje.jpg',
+      image: createAvatarDataUri('Andre Cronje'),
       match: 0,
       description: 'Criador do Yearn Finance. DeFi degen original.',
       portfolio: 'Heavy DeFi: YFI, CRV, AAVE e experimentais.',
     },
     {
       name: 'Fernando Ulrich',
-      image: '/celebrities/ulrich.jpg',
+      image: createAvatarDataUri('Fernando Ulrich'),
       match: 0,
       description: 'Economista e bitcoiner brasileiro. Educador influente.',
       portfolio: 'Bitcoin first, com pitada de ETH.',
     },
     {
       name: 'Guiriba',
-      image: '/celebrities/guiriba.jpg',
+      image: createAvatarDataUri('Guiriba'),
       match: 0,
       description: 'Trader brasileiro lendário. Performance e análise técnica.',
       portfolio: 'BTC + SOL + altcoins de momentum.',
     },
     {
       name: 'Chico',
-      image: '/celebrities/chico.jpg',
+      image: createAvatarDataUri('Chico'),
       match: 0,
       description: 'Influencer crypto brasileiro. Diversificado e estratégico.',
       portfolio: 'Mix de majors + gems de médio cap.',

@@ -299,9 +299,9 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Score ring */
 .score-ring {
-  stroke-dasharray: 553;
-  stroke-dashoffset: 553;
-  animation: fillRing 1.5s ease-out forwards;
+  stroke-dasharray: var(--ring-length, 0);
+  stroke-dashoffset: var(--ring-length, 0);
+  animation: fillRing 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes fillRing {
